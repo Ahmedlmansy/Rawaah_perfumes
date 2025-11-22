@@ -8,7 +8,6 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
 export function LoginForm({
   className,
   ...props
