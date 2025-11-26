@@ -13,7 +13,7 @@ export default function Navigation() {
             </li>
 
             <li>
-              <Link href="/shop" className="py-2 hover:text-black">
+              <Link href="/brands" className="py-2 hover:text-black">
                 Brands
               </Link>
             </li>
@@ -25,7 +25,7 @@ export default function Navigation() {
             </li>
 
             <li>
-              <Link href="/blog" className="py-2 hover:text-black">
+              <Link href="/notes" className="py-2 hover:text-black">
                 Notes
               </Link>
             </li>
