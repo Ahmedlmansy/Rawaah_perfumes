@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "../ProductCard";
-import { productsShow } from "@/app/page";
 import { Product } from "@/types/products";
+import { productsShow } from "@/data/products";
 export default function TopRated() {
   return (
     <div>
