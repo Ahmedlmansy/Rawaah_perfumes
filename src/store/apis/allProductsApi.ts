@@ -1,7 +1,9 @@
-import { supabase } from "@/lib/supabaseClient"
+import { createClient } from "@/lib/supabase/client";
 
-export const allProductsApi  = {
+export const allProductsApi = {
+    
     getProducts: async () => {
+          const supabase = createClient();
         const { data, error } = await supabase.from("products").select("*")
          if (error) {
             console.error("Supabase Error:", error);

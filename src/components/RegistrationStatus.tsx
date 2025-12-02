@@ -3,8 +3,8 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
-import { User } from "@supabase/supabase-js";
-import { createBrowserClient } from "@supabase/ssr";
+import { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "./ui/spinner";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
@@ -13,48 +13,63 @@ export default function RegistrationStatus() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createClient();
 
   useEffect(() => {
+    setMounted(true);
+
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-      setLoading(false);
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        setUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getUser();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
+        setUser(session?.user ?? null);
+      }
+    );
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, []);
 
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
       await supabase.auth.signOut();
-
       setUser(null);
 
-      setTimeout(() => {
-        router.push("/");
-      }, 300);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Error logging out:", error);
+    } finally {
       setLoggingOut(false);
     }
   };
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
