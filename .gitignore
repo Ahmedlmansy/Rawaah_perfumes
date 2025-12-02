@@ -37,3 +37,6 @@ next-env.d.ts
 
 # Data base
 .dataBase
+
+# emails
+.emails.text
