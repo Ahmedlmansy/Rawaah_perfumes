@@ -1,8 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Navigation from "./Navigation";
-import { Badge } from "./ui/badge";
-import Link from "next/link";
+import RegistrationStatus from "./RegistrationStatus";
 
 export default function Header() {
   return (
@@ -23,33 +22,7 @@ export default function Header() {
           <Navigation />
         </div>
         <div className="icons flex gap-6">
-          <div className="cart relative">
-            <Link href={"/cart"}>
-              <Badge
-                className="h-5 min-w-5 absolute rounded-full px-1 top-[-7px] left-[-17px] flex justify-center  text-center"
-                variant="default"
-              >
-                0
-              </Badge>
-              <i className="fa-solid fa-cart-shopping text-[24px] text-[#A38862]"></i>
-            </Link>
-          </div>
-          <div className="wishlist relative">
-            <Link href={"/wishlist"}>
-              <Badge
-                className="h-5 min-w-5 absolute rounded-full px-1 top-[-7px] left-[-17px] flex justify-center  text-center"
-                variant="default"
-              >
-                0
-              </Badge>
-              <i className="fa-regular fa-heart  text-[24px] text-[#A38862]"></i>
-            </Link>
-          </div>
-          <div className="profile relative">
-            <Link href={"/profile"}>
-              <i className="fa-regular fa-user  text-[24px] text-[#A38862]"></i>
-            </Link>
-          </div>
+          <RegistrationStatus />
         </div>
       </div>
     </div>

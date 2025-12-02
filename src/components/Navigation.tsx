@@ -19,7 +19,7 @@ export default function Navigation() {
             </li>
 
             <li>
-              <Link href="/shop" className="py-2 hover:text-black">
+              <Link href="/products" className="py-2 hover:text-black">
                 Shop
               </Link>
             </li>
