@@ -2,17 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { allProductsApi  } from "../apis/allProductsApi"
 
 export interface Products{
-    id: number
-    name: string
-    created_at: string
-    brand: string
-    price: number
-    discount_price: number
-    type: string
-    image: string
-    size: string
-    stock: number
-    Best_Sellers : number
+    id: string;
+  name: string;
+  brand: string;
+  price: number;
+  discount_price: number | null;
+  type: "Men" | "Women" | "Unisex";
+  image: string;
+  size: number;
+  created_at: string;
+  stock: number;
+  Best_Sellers: boolean;
 }
 interface ProductsState {
       items: Products[];

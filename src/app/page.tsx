@@ -4,7 +4,150 @@ import FeaturedProductCard from "@/components/FeaturedProductCard";
 import ProductsHome from "@/components/ProductsHome";
 import Slider from "@/components/Slider";
 import CenterTitle from "@/components/ui/CenterTitle";
-
+import { Product } from "@/types/products";
+export const productsShow: Product[] = [
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+  {
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    name: "Scandal",
+    brand: "Jean Paul",
+    price: 89,
+    discount_price: 50,
+    type: "Women",
+    image:
+      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
+    size: 100,
+    created_at: "2025-11-28 18:33:51.79264+00",
+    stock: 100,
+    Best_Sellers: false,
+  },
+] as const;
+//
 export default function Home() {
   return (
     <div className="">
