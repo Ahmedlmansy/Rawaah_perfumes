@@ -34,7 +34,7 @@ export const fetchBrands = createAsyncThunk(
 
 const brandSlice = createSlice({
   name: "brands",
- initialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
   builder
