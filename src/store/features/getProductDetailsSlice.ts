@@ -30,19 +30,23 @@ const initialState: ProductDetailsState = {
 };
 
 
-export const fetchProductDetails = createAsyncThunk(
+export const fetchProductDetails = createAsyncThunk<
+  ProductDetails,
+  string,        
+  { rejectValue: string } 
+>(
   "productDetails/fetchProductDetails",
-  async (id: string, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
       const data = await productDetails.getProductDetailsApi(id);
-
-      
       return data[0];
-    } catch (error : any) {
-      return thunkAPI.rejectWithValue(error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
+
 
 const productDetailsSlice = createSlice({
   name: "productDetails",
@@ -66,7 +70,7 @@ const productDetailsSlice = createSlice({
           state.data = action.payload;
         }
       )
-      .addCase(fetchProductDetails.rejected, (state, action: any) => {
+      .addCase(fetchProductDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Error";
       });
