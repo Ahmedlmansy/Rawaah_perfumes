@@ -1,13 +1,14 @@
 export interface Product {
-  id: string;
-  name: string;
+   name: string;
   brand: string;
   price: number;
-  discount_price: number | null;
-  type: "Men" | "Women" | "Unisex";
+  discount_price?: number;
+  type: string;
   image: string;
   size: number;
-  created_at: string;
   stock: number;
   Best_Sellers: boolean;
+  season: string;
+  description: string;
+  notes: string[];
 }
