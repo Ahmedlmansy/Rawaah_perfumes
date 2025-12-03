@@ -4,10 +4,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "./ui/spinner";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 export default function RegistrationStatus() {
   const [user, setUser] = useState<User | null>(null);
@@ -16,7 +16,7 @@ export default function RegistrationStatus() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  const supabase = createClient();
+  const supabase = createSupabaseClient();
 
   useEffect(() => {
     setMounted(true);

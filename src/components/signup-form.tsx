@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -24,9 +24,9 @@ export function SignupForm({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-  const supabase = createClient();
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
   const handleRegister = async () => {
     if (password !== confirmPassword) {
@@ -41,26 +41,23 @@ export function SignupForm({
         email,
         password,
         options: {
-          data: {
-            name: name,
-          },
+          data: { name },
         },
       });
 
       if (error) {
         toast.error(error.message);
-        setLoading(false);
         return;
       }
 
       toast.success("Account created! Check your email to confirm.");
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
       router.push("/login");
       router.refresh();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+    } finally {
       setLoading(false);
     }
   };

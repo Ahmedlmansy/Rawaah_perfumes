@@ -2,7 +2,7 @@ import { Product } from "@/types/products";
 
 export const productsShow: Product[] = [
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5231",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -16,7 +16,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5232",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -30,7 +30,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5233",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -44,7 +44,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5234",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -58,7 +58,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5235",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -72,7 +72,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5236",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -86,7 +86,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5237",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -100,7 +100,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5238",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -114,7 +114,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5239",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
@@ -128,7 +128,7 @@ export const productsShow: Product[] = [
     Best_Sellers: false,
   },
   {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d523",
+    id: "081e86ee-6b1b-4a65-a127-750cc1b3d52310",
     name: "Scandal",
     brand: "Jean Paul",
     price: 89,
