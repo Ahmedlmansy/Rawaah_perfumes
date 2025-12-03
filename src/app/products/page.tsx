@@ -37,7 +37,7 @@ export default function Shop() {
           <div className="">
             <div className="grid grid-cols-2 mt-8 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {items.map((product) => (
-                <Link key={product.id} href={`shop/${product.name}`}>
+                <Link key={product.id} href={`products/${product.id}`}>
                   <ProductCard {...product} />
                 </Link>
               ))}
