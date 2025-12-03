@@ -1,5 +1,5 @@
-"use client";
 import { LoginForm } from "@/components/login-form";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -7,7 +7,9 @@ export default function LoginPage() {
       <div className="flex flex-col gap-4 p-6 md:p-10 bg-[#ab8e661a]">
         <div className="flex flex-1 items-center justify-center ">
           <div className="w-full max-w-xs">
-            <LoginForm />
+            <Suspense fallback={<div className="p-6">Loading...</div>}>
+              <LoginForm />
+            </Suspense>
           </div>
         </div>
       </div>
