@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "../ProductCard";
-import { Product } from "@/types/products";
 import { productsShow } from "@/data/products";
+import { Product } from "@/types/products";
 
 export default function BestSeller() {
   return (

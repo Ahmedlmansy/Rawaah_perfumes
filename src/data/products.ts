@@ -1,145 +1,214 @@
-import { Product } from "@/types/products";
-
-export const productsShow: Product[] = [
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5231",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5232",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5233",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5234",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5235",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5236",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5237",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5238",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d5239",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-  {
-    id: "081e86ee-6b1b-4a65-a127-750cc1b3d52310",
-    name: "Scandal",
-    brand: "Jean Paul",
-    price: 89,
-    discount_price: 50,
-    type: "Women",
-    image:
-      "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Scandal.avif",
-    size: 100,
-    created_at: "2025-11-28 18:33:51.79264+00",
-    stock: 100,
-    Best_Sellers: false,
-  },
-] as const;
-//
+export interface Products{
+    id: string;
+  name: string;
+  brand: string;
+  price: number;
+  discount_price: number | null;
+  type: "Men" | "Women" | "Unisex";
+  image: string;
+  size: number;
+  created_at: string;
+  stock: number;
+  Best_Sellers: boolean;
+  notes: string[]
+  season: string
+  description  : string
+}
+export const productsShow: Products[] = [
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e1",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e2",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e3",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e4",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e5",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e6",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+{
+    "id": "4858c15d-672f-45bf-b13d-3ef193992f1e7",
+    "name": "Eros",
+    "brand": "Versace",
+    "price": 199,
+    "discount_price": null,
+    "type": "Men",
+    "image": "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/Eros.avif",
+    "size": 100,
+    "created_at": "2025-11-28T17:57:27.627843+00:00",
+    "stock": 100,
+    "Best_Sellers": false,
+    "season": "winter",
+    "description": "Eros by Versace is a Aromatic Fougere fragrance for men. Eros was launched in 2012. The nose behind this fragrance is Aurélien Guichard. Top notes are Mint, Green Apple and Lemon; middle notes are Tonka Bean, Ambroxan and Geranium; base notes are Madagascar Vanilla, Virginian Cedar, Atlas Cedar, Vetiver and Oakmoss.",
+    "notes": [
+        "Mint",
+        "Green Apple",
+        "Lemon",
+        "Tonka Bean",
+        "Ambroxan",
+        "Geranium",
+        "Madagascar Vanilla",
+        "Virginian Cedar",
+        "Atlas Cedar",
+        "Vetiver",
+        "Oakmoss"
+    ]
+},
+]

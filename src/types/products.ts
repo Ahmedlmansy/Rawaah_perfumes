@@ -1,9 +1,10 @@
 export interface Product {
-   name: string;
+  id : string
+  name: string;
   brand: string;
   price: number;
-  discount_price?: number;
-  type: string;
+  discount_price: number | null;
+  type: "Men" | "Women" | "Unisex";
   image: string;
   size: number;
   stock: number;
@@ -11,4 +12,5 @@ export interface Product {
   season: string;
   description: string;
   notes: string[];
+  created_at : string
 }
