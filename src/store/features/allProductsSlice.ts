@@ -13,7 +13,8 @@ export interface Products{
   created_at: string;
   stock: number;
   Best_Sellers: boolean;
-  notes : string[]
+  notes: string[]
+  season : string
 }
 interface ProductsState {
       items: Products[];
