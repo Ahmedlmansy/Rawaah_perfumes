@@ -3,8 +3,6 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import "@/lib/fontawesome";
 
 import "./styles/globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import ReduxProvider from "@/Providers/providers";
 
 export const metadata: Metadata = {
@@ -26,11 +24,7 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        <ReduxProvider>
-          <Header />
-          {children}
-          <Footer />
-        </ReduxProvider>
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

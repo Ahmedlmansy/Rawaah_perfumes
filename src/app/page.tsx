@@ -1,6 +1,8 @@
 import { Banners, BannersHome } from "@/components/Banners";
 import BlogCard from "@/components/BlogCard";
 import FeaturedProductCard from "@/components/FeaturedProductCard";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import ProductsHome from "@/components/ProductsHome";
 import Slider from "@/components/Slider";
 import CenterTitle from "@/components/ui/CenterTitle";
@@ -8,6 +10,7 @@ import CenterTitle from "@/components/ui/CenterTitle";
 export default function Home() {
   return (
     <div className="">
+      <Header />
       {/* 
       Slider
       */}
@@ -83,6 +86,7 @@ export default function Home() {
           <BlogCard />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
