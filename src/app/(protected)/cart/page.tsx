@@ -145,7 +145,7 @@ export default function CartPage() {
                                 {item.product.brand}
                               </p>
                               <Badge variant="outline" className="mt-1 text-xs">
-                                {item.product.size}
+                                {item.product.size} ml
                               </Badge>
                             </div>
 

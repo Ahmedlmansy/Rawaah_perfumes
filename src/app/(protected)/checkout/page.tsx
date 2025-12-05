@@ -18,59 +18,24 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-type Product = {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  discount_price?: number;
-  image: string;
-  size: string;
-};
-
-type CartItem = {
-  product: Product;
-  quantity: number;
-};
-
-// بيانات تجريبية - استبدلها بـ Redux
-const mockCartItems: CartItem[] = [
-  {
-    product: {
-      id: "1",
-      name: "His Confession",
-      brand: "Rawaah Perfumes",
-      price: 150,
-      discount_price: 120,
-      image:
-        "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/His_Confession.avif",
-      size: "50ml",
-    },
-    quantity: 2,
-  },
-  {
-    product: {
-      id: "2",
-      name: "Midnight Rose",
-      brand: "Rawaah Perfumes",
-      price: 180,
-      image:
-        "https://qgzzibqbccnvcmxupbva.supabase.co/storage/v1/object/public/products/His_Confession.avif",
-      size: "100ml",
-    },
-    quantity: 1,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { createOrderApi } from "@/store/apis/ordersApi";
+import { useSupabaseUser } from "@/hooks/useSupabaseUser";
+import { clearCartApi } from "@/store/apis/cartApi";
 
 export default function CheckoutPage() {
-  const [cartItems] = React.useState<CartItem[]>(mockCartItems);
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { items } = useSelector((state: RootState) => state.cart);
+  const { user } = useSupabaseUser();
+
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("cash");
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   // Form States
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -86,8 +51,8 @@ export default function CheckoutPage() {
     cvv: "",
   });
 
-  // حساب الإجمالي
-  const subtotal = cartItems.reduce((total, item) => {
+  // subtotal, shipping, tax, total
+  const subtotal = items.reduce((total, item) => {
     const price = item.product.discount_price ?? item.product.price;
     return total + price * item.quantity;
   }, 0);
@@ -104,17 +69,18 @@ export default function CheckoutPage() {
   };
 
   const handlePlaceOrder = async () => {
-    // Validation
+    if (!user) return alert("login frist ");
+
     const requiredFields = [
       "firstName",
       "lastName",
-      "email",
       "phone",
       "address",
       "city",
       "state",
       "zip",
     ];
+
     const isValid = requiredFields.every(
       (field) => formData[field as keyof typeof formData].trim() !== ""
     );
@@ -124,30 +90,41 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (paymentMethod === "card") {
-      const cardFields = ["cardNumber", "cardName", "expiry", "cvv"];
-      const isCardValid = cardFields.every(
-        (field) => formData[field as keyof typeof formData].trim() !== ""
-      );
-      if (!isCardValid) {
-        alert("Please fill in all card details");
-        return;
-      }
-    }
-
     setLoading(true);
 
-    // محاكاة API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const address = `${formData.address}, ${formData.city}, ${formData.state}, ${formData.zip}`;
 
-    setLoading(false);
-    setOrderPlaced(true);
+      await dispatch(
+        createOrderApi({
+          userId: user.id,
+          items: items,
+          total,
+          address,
+          phone: formData.phone,
+          payment_method: paymentMethod,
+          frist_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+        })
+      ).unwrap();
+
+      // Clear Cart
+      await dispatch(clearCartApi(user.id));
+
+      setOrderPlaced(true);
+    } catch (err) {
+      console.log(err);
+      alert("Oppes! Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Order Success Screen
   if (orderPlaced) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-stone-50/50 flex items-center justify-center p-4">
+      <div className="min-h-screen  flex items-center justify-center p-4">
         <Card className="max-w-lg w-full text-center border-[#A78B64]/20">
           <CardContent className="p-12">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -163,15 +140,9 @@ export default function CheckoutPage() {
             </p>
             <div className="space-y-3">
               <Button
-                className="w-full bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64]"
-                onClick={() => (window.location.href = "/orders")}
-              >
-                View Order Details
-              </Button>
-              <Button
                 variant="outline"
                 className="w-full border-[#A78B64] text-[#A78B64] hover:bg-[#A78B64]/10"
-                onClick={() => (window.location.href = "/")}
+                onClick={() => (window.location.href = "/products")}
               >
                 Continue Shopping
               </Button>
@@ -183,7 +154,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-stone-50/50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Header */}
         <div className="mb-8">
@@ -215,7 +186,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input
                       id="firstName"
-                      placeholder="John"
+                      placeholder="Ahmed"
                       value={formData.firstName}
                       onChange={handleInputChange}
                       className="border-[#A78B64]/30 focus:border-[#A78B64]"
@@ -225,7 +196,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="lastName">Last Name *</Label>
                     <Input
                       id="lastName"
-                      placeholder="Doe"
+                      placeholder="Elmansy"
                       value={formData.lastName}
                       onChange={handleInputChange}
                       className="border-[#A78B64]/30 focus:border-[#A78B64]"
@@ -239,7 +210,7 @@ export default function CheckoutPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="ahmed@example.com"
                       value={formData.email}
                       onChange={handleInputChange}
                       className="pl-10 border-[#A78B64]/30 focus:border-[#A78B64]"
@@ -253,7 +224,7 @@ export default function CheckoutPage() {
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="+20 123456789"
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="pl-10 border-[#A78B64]/30 focus:border-[#A78B64]"
@@ -287,7 +258,7 @@ export default function CheckoutPage() {
                     <Label htmlFor="city">City *</Label>
                     <Input
                       id="city"
-                      placeholder="New York"
+                      placeholder="Mansora"
                       value={formData.city}
                       onChange={handleInputChange}
                       className="border-[#A78B64]/30 focus:border-[#A78B64]"
@@ -336,7 +307,12 @@ export default function CheckoutPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Tabs value={paymentMethod} onValueChange={setPaymentMethod}>
+                <Tabs
+                  value={paymentMethod}
+                  onValueChange={(value) =>
+                    setPaymentMethod(value as "card" | "cash")
+                  }
+                >
                   <TabsList className="grid w-full grid-cols-2 bg-[#A78B64]/10">
                     <TabsTrigger
                       value="card"
@@ -431,7 +407,7 @@ export default function CheckoutPage() {
               <CardContent className="space-y-4">
                 {/* Products List */}
                 <div className="space-y-3 max-h-64 overflow-y-auto">
-                  {cartItems.map((item) => {
+                  {items.map((item) => {
                     const price =
                       item.product.discount_price ?? item.product.price;
                     return (
