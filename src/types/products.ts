@@ -12,5 +12,6 @@ export interface Product {
   season: string;
   description: string;
   notes: string[];
-  created_at : string
+  created_at: string
+  quantity : number
 }

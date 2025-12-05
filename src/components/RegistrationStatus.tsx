@@ -8,6 +8,9 @@ import { Spinner } from "./ui/spinner";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { fetchCart } from "@/store/apis/cartApi";
 
 export default function RegistrationStatus() {
   const [user, setUser] = useState<User | null>(null);
@@ -15,6 +18,7 @@ export default function RegistrationStatus() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const supabase = createSupabaseClient();
 
@@ -27,6 +31,10 @@ export default function RegistrationStatus() {
           data: { user },
         } = await supabase.auth.getUser();
         setUser(user);
+
+        if (user) {
+          dispatch(fetchCart(user.id));
+        }
       } catch (error) {
         console.error("Error fetching user:", error);
       } finally {
@@ -40,13 +48,18 @@ export default function RegistrationStatus() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
       (event: AuthChangeEvent, session: Session | null) => {
-        setUser(session?.user ?? null);
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+
+        if (currentUser) {
+          dispatch(fetchCart(currentUser.id));
+        }
       }
     );
 
     return () => subscription.unsubscribe();
   }, []);
-
+  const { items } = useSelector((state: RootState) => state.cart);
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
@@ -89,7 +102,7 @@ export default function RegistrationStatus() {
               className="h-5 min-w-5 absolute rounded-full px-1 top-[-7px] left-[-17px] flex justify-center items-center text-center z-10"
               variant="default"
             >
-              0
+              {items?.length || 0}
             </Badge>
             <i className="fa-solid fa-cart-shopping text-[24px] text-[#A38862] group-hover:text-[#8a7050] transition-colors"></i>
           </Link>

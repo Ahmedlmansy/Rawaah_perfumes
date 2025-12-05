@@ -5,8 +5,33 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Products } from "@/store/features/allProductsSlice";
+import { useDispatch } from "react-redux";
+import { addToCartApi } from "@/store/apis/cartApi";
+import { useSupabaseUser } from "@/hooks/useSupabaseUser";
+import { AppDispatch } from "@/store";
 
 export default function ProductCard(product: Products) {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSupabaseUser();
+  const handleAddToCart = () => {
+    if (!user) return;
+
+    dispatch(
+      addToCartApi({
+        userId: user.id,
+        product: {
+          id: product.id,
+          name: product.name,
+          brand: product.brand,
+          price: product.price,
+          discount_price: product.discount_price,
+          image: product.image,
+          size: product.size,
+        },
+        quantity: 1,
+      })
+    );
+  };
   return (
     <Card className="max-w-sm mx-auto h-full flex justify-between flex-col bg-white/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg overflow-hidden">
       {/* image  */}
@@ -55,6 +80,10 @@ export default function ProductCard(product: Products) {
             <Button
               variant="default"
               className="rounded-full px-5 py-2 shadow-md hover:scale-105 transition-transform"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddToCart();
+              }}
             >
               Add to cart
             </Button>
