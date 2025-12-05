@@ -13,5 +13,4 @@ export interface Product {
   description: string;
   notes: string[];
   created_at: string
-  quantity : number
 }

@@ -12,7 +12,7 @@ export interface Products{
   Best_Sellers: boolean;
   notes: string[]
   season: string
-  description  : string
+    description: string
 }
 export const productsShow: Products[] = [
 {
