@@ -78,7 +78,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-stone-50/50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Header */}
         <div className="mb-8">
