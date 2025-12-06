@@ -14,7 +14,8 @@ export interface Products{
   stock: number;
   Best_Sellers: boolean;
   notes: string[]
-  season : string
+  season: string
+  description: string;
 }
 interface ProductsState {
       items: Products[];
