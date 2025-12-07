@@ -10,14 +10,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase/client";
+import { AppDispatch } from "@/store";
+import { fetchNotes } from "@/store/features/notesSlice";
 import { Save } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 type DialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
 export default function AddNoteDialog({ open, onOpenChange }: DialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -37,6 +41,7 @@ export default function AddNoteDialog({ open, onOpenChange }: DialogProps) {
 
     alert("Note added successfully ");
     onOpenChange(false);
+    dispatch(fetchNotes());
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

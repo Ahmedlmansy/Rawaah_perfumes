@@ -11,8 +11,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-import { Brand } from "@/store/features/brandSlice";
+import { Brand, fetchBrands } from "@/store/features/brandSlice";
 import { supabase } from "@/lib/supabase/client";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
 
 type DeleteBrandDialogProps = {
   open: boolean;
@@ -26,7 +28,7 @@ export default function DeleteBrandDialog({
   brand,
 }: DeleteBrandDialogProps) {
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   if (!brand) return null;
 
   const handleDelete = async () => {
@@ -45,6 +47,7 @@ export default function DeleteBrandDialog({
 
     alert("Brand deleted successfully ");
     onOpenChange(false);
+    dispatch(fetchBrands());
   };
 
   return (

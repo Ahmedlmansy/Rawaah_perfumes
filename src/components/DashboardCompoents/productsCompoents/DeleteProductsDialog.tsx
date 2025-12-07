@@ -8,9 +8,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase/client";
+import { AppDispatch } from "@/store";
+import { fetchProducts } from "@/store/features/allProductsSlice";
 import { Product } from "@/types/products";
 import { Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 type AddProductsDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -22,7 +25,7 @@ export default function DeleteProducts({
   product,
 }: AddProductsDialogProps) {
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   const handleDelete = async () => {
     if (!product?.id) return;
 
@@ -43,6 +46,7 @@ export default function DeleteProducts({
 
     alert("Product deleted successfully");
     onOpenChange(false);
+    dispatch(fetchProducts());
   };
 
   return (

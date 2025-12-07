@@ -10,9 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase/client";
-import { Notes } from "@/store/features/notesSlice";
+import { AppDispatch } from "@/store";
+import { fetchNotes, Notes } from "@/store/features/notesSlice";
 import { Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 type DialogProps = {
   open: boolean;
@@ -27,6 +29,7 @@ export default function EditNoteDialog({
 }: DialogProps) {
   const [formData, setFormData] = useState<Notes | null>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (note) setFormData(note);
@@ -52,6 +55,7 @@ export default function EditNoteDialog({
     }
 
     onOpenChange(false);
+    dispatch(fetchNotes());
   };
 
   if (!open || !formData) return null;

@@ -23,6 +23,9 @@ import { Label } from "@radix-ui/react-label";
 import { Save } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { Product } from "@/types/products";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
+import { fetchProducts } from "@/store/features/allProductsSlice";
 type EditProductsDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -35,7 +38,7 @@ export default function EditProductsDialog({
 }: EditProductsDialogProps) {
   const [formData, setFormData] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (product) setFormData(product);
   }, [product]);
@@ -67,6 +70,7 @@ export default function EditProductsDialog({
     }
 
     onOpenChange(false);
+    dispatch(fetchProducts());
   };
 
   if (!formData) return null;

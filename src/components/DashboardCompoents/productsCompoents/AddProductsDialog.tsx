@@ -17,10 +17,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase/client";
+import { AppDispatch } from "@/store";
 import { fetchProducts } from "@/store/features/allProductsSlice";
 import { Label } from "@radix-ui/react-label";
 import { Save } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 type AddProductsDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -29,6 +31,8 @@ export default function AddProductsDialog({
   open,
   onOpenChange,
 }: AddProductsDialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [formData, setFormData] = useState({
     name: "",
     brand: "",
@@ -69,6 +73,7 @@ export default function AddProductsDialog({
 
     alert("Product added successfully ");
     onOpenChange(false);
+    dispatch(fetchProducts());
   };
 
   return (

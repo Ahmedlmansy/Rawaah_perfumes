@@ -17,9 +17,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/client";
+import { AppDispatch } from "@/store";
+import { fetchBrands } from "@/store/features/brandSlice";
 
 import { Save } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 type AddProductsDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,6 +31,8 @@ export default function AddBrandDialog({
   open,
   onOpenChange,
 }: AddProductsDialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -50,6 +55,7 @@ export default function AddBrandDialog({
 
     alert("Product added successfully ");
     onOpenChange(false);
+    dispatch(fetchBrands());
   };
 
   return (

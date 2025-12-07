@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/client";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
 
 type EditBrandDialogProps = {
   open: boolean;
@@ -35,6 +37,7 @@ export default function EditBrandDialog({
 }: EditBrandDialogProps) {
   const [formData, setFormData] = useState<Brand | null>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (open && brand) {
@@ -71,7 +74,7 @@ export default function EditBrandDialog({
 
       alert("Brand updated successfully");
       onOpenChange(false);
-      await fetchBrands();
+      dispatch(fetchBrands());
     } catch (error) {
       console.error("Update error:", error);
       alert("Failed to update brand");

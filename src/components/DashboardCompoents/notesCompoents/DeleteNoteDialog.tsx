@@ -8,9 +8,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { supabase } from "@/lib/supabase/client";
-import { Notes } from "@/store/features/notesSlice";
+import { AppDispatch } from "@/store";
+import { fetchNotes, Notes } from "@/store/features/notesSlice";
 import { Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 type DialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -21,6 +23,7 @@ export default function DeleteNoteDialog({
   onOpenChange,
   note,
 }: DialogProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
 
   if (!note) return null;
@@ -42,6 +45,7 @@ export default function DeleteNoteDialog({
 
     alert("Nots deleted successfully ");
     onOpenChange(false);
+    dispatch(fetchNotes());
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
