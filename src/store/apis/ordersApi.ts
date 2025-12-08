@@ -11,8 +11,8 @@ export const createOrderApi = createAsyncThunk(
       userId,
       items,
       total,
-          address,
-          frist_name,
+           address,
+            frist_name,
           last_name, 
     email,
     payment_method,
@@ -46,5 +46,34 @@ export const createOrderApi = createAsyncThunk(
 
     if (error) return rejectWithValue(error.message);
     return true;
+  }
+);
+
+export const fetchOrdersApi = createAsyncThunk(
+  "orders/fetch",
+  async (_, { rejectWithValue }) => {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) return rejectWithValue(error.message);
+    return data;
+  }
+);
+
+export const updateOrderStatusApi = createAsyncThunk(
+  "orders/updateStatus",
+  async (
+    { orderId, status }: { orderId: string; status: string },
+    { rejectWithValue }
+  ) => {
+    const { error } = await supabase
+      .from("orders")
+      .update({ status })
+      .eq("id", orderId);
+
+    if (error) return rejectWithValue(error.message);
+    return { orderId, status };
   }
 );
