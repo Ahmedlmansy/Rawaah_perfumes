@@ -9,14 +9,23 @@ import { useDispatch } from "react-redux";
 import { addToCartApi } from "@/store/apis/cartApi";
 import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 import { AppDispatch } from "@/store";
+import { toast } from "sonner";
 
 export default function ProductCard(product: Products) {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSupabaseUser();
-  const handleAddToCart = () => {
-    if (!user) return;
+  const discountPercent = product?.discount_price
+    ? Math.round(
+        ((product.price - product.discount_price) / product.price) * 100
+      )
+    : 0;
+  const handleAddToCart = async () => {
+    if (!user) {
+      toast.error("You must login first");
+      return;
+    }
 
-    dispatch(
+    const result = await dispatch(
       addToCartApi({
         userId: user.id,
         product: {
@@ -31,6 +40,12 @@ export default function ProductCard(product: Products) {
         quantity: 1,
       })
     );
+
+    if (addToCartApi.fulfilled.match(result)) {
+      toast.success("Added to cart!");
+    } else {
+      toast.error("Failed to add to cart!");
+    }
   };
   return (
     <Card className="max-w-sm mx-auto h-full flex justify-between flex-col bg-white/40 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg overflow-hidden">
@@ -70,10 +85,24 @@ export default function ProductCard(product: Products) {
 
         <div className="mt-4 flex items-center justify-between gap-4">
           <div>
-            <div className="text-xl font-bold text-amber-900">
-              {product?.price}$
+            <div className="space-y-2">
+              <div className="flex items-baseline gap-3">
+                <span className="text-xl font-bold text-[#A78B64]">
+                  ${product.discount_price ?? product.price}
+                </span>
+                {product.discount_price && (
+                  <span className="text-xl text-gray-400 line-through">
+                    ${product.price}
+                  </span>
+                )}
+              </div>
+              {product.discount_price && (
+                <p className="text-[12px] text-green-600 font-medium">
+                  You save ${product.price - product.discount_price} (
+                  {discountPercent}% off)
+                </p>
+              )}
             </div>
-            {/* <div className="text-xs text-muted-foreground">Tax incl.</div> */}
           </div>
 
           <div className="flex items-center gap-3">

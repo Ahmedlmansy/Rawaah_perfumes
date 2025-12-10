@@ -42,18 +42,15 @@ export function LoginForm({
         return;
       }
 
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const userId = data.user.id;
 
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile } = await supabase
         .from("profiles")
         .select("name, role")
         .eq("id", userId)
-        .single();
-
-      if (profileError) {
-        toast.error("Error fetching user profile");
-        return;
-      }
+        .maybeSingle();
 
       toast.success(`Welcome ${profile?.name || "back"}!`);
 
@@ -62,14 +59,16 @@ export function LoginForm({
       if (redirectedFrom) {
         router.push(redirectedFrom);
       } else if (profile?.role === "admin") {
-        router.push("/dashboard");
+        router.push("/dashborad");
+      } else if (profile?.role === "worker") {
+        router.push("/dashborad");
       } else {
         router.push("/");
       }
 
       router.refresh();
     } catch (err) {
-      console.log(err);
+      console.error("Login error:", err);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);

@@ -9,7 +9,7 @@ export interface ProductDetails {
   discount_price?: number;
   type?: string[];
   image: string;
-  size?: string;
+  size?: number;
   stock?: number;
   Best_Sellers?: boolean;
   season?: string;

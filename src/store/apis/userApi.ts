@@ -1,6 +1,20 @@
 import { createSupabaseBrowser } from "@/lib/supabase/client";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+export const fetchAllUsers = createAsyncThunk("profiles/allUsers", async () => {
+  const supabase = createSupabaseBrowser();
+
+
+
+  const { data: data } = await supabase
+    .from("profiles")
+    .select("*")
+
+  return {
+      users: data || [],
+  };
+});
+
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   const supabase = createSupabaseBrowser();
 

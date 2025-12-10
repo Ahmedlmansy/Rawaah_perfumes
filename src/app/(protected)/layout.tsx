@@ -10,21 +10,38 @@ export default async function ProtectedLayout({
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
+    console.log(" No user, redirect to login");
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["admin", "worker"].includes(profile.role)) {
+  if (profileError) {
+    console.error(" Profile fetch failed:", profileError.message);
+    redirect("/login");
+  }
+
+  if (!profile) {
+    console.log(" Profile not found");
+    redirect("/login");
+  }
+
+  const allowedRoles = ["admin", "worker"];
+
+  if (!allowedRoles.includes(profile.role)) {
+    console.log(" Unauthorized role:", profile.role);
     redirect("/");
   }
+
+  console.log(" Access granted:", user.email, profile.role);
 
   return <>{children}</>;
 }

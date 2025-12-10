@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Package,
@@ -30,16 +30,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { fetchUser } from "@/store/apis/userApi";
+import { logout } from "@/store/features/userSlice";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const dispatch = useDispatch<AppDispatch>();
   const { email } = useSelector((state: RootState) => state.user);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
@@ -52,7 +54,9 @@ export default function DashboardLayout({
     { id: "users", label: "Users", icon: Users },
     { id: "messages", label: "Messages", icon: Mail },
   ];
-
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Sidebar */}
@@ -133,7 +137,10 @@ export default function DashboardLayout({
                 Settings
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600">
-                <LogOut className="w-4 h-4 mr-2" />
+                <LogOut
+                  className="w-4 h-4 mr-2"
+                  onClick={() => dispatch(logout())}
+                />
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>

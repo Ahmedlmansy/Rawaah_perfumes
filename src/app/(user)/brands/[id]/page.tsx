@@ -1,9 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import {
@@ -15,8 +15,11 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import CenterTitle from "@/components/ui/CenterTitle";
+import { fetchProducts } from "@/store/features/allProductsSlice";
 
 export default function BrandDetails() {
+  const dispatch = useDispatch<AppDispatch>();
+
   const { id } = useParams();
   const brandName = decodeURIComponent(id as string);
 
@@ -36,6 +39,10 @@ export default function BrandDetails() {
     const to = from + limit;
     return filteredProducts.slice(from, to);
   }, [page, filteredProducts]);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   return (
     <div className="p-8 container mx-auto">

@@ -21,15 +21,29 @@ import { fetchProductDetails } from "@/store/features/getProductDetailsSlice";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
+import { useSupabaseUser } from "@/hooks/useSupabaseUser";
+import { addToCartApi } from "@/store/apis/cartApi";
+import { Product } from "@/types/products";
+import { toast } from "sonner";
 
 export default function ProductPage() {
-  const params = useParams();
-  const id = params.id as string;
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
 
   const dispatch = useDispatch<AppDispatch>();
+
   const { data, loading, error } = useSelector(
     (state: RootState) => state.productDetails
-  );
+  ) as {
+    data: Product | null;
+    loading: boolean;
+    error: string | null;
+  };
+
+  const { user } = useSupabaseUser();
+
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
     if (id) {
@@ -37,16 +51,44 @@ export default function ProductPage() {
     }
   }, [dispatch, id]);
 
-  const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const discountPercent = data?.discount_price
-    ? Math.round(((data.price - data.discount_price) / data.price) * 100)
-    : 0;
-  console.log(data);
-  if (loading) return <p>loding..</p>;
+  if (loading) return <p>loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
   if (!data) return null;
+
+  const discountPercent =
+    data.discount_price && data.price
+      ? Math.round(((data.price - data.discount_price) / data.price) * 100)
+      : 0;
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      toast.error("You must login first");
+      return;
+    }
+
+    const result = await dispatch(
+      addToCartApi({
+        userId: user.id,
+        product: {
+          id: data.id,
+          name: data.name,
+          brand: data.brand,
+          price: data.price,
+          discount_price: data.discount_price,
+          image: data.image,
+          size: data.size,
+        },
+        quantity: quantity,
+      })
+    );
+
+    if (addToCartApi.fulfilled.match(result)) {
+      toast.success("Added to cart!");
+    } else {
+      toast.error("Failed to add to cart!");
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 lg:py-12">
@@ -286,7 +328,10 @@ export default function ProductPage() {
 
             {/* add to cart  */}
             <div className="space-y-3 pt-4">
-              <Button className="w-full bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64] text-white h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+              <Button
+                className="w-full bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64] text-white h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                onClick={handleAddToCart}
+              >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart
               </Button>
