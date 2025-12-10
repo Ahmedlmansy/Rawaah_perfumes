@@ -27,10 +27,9 @@ interface EditDialogProps {
 export default function EditUserDialog({
   open,
   onOpenChange,
-  user,
 }: EditDialogProps) {
   return (
-    <Dialog open={} onOpenChange={setShowEditDialog}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
@@ -39,43 +38,19 @@ export default function EditUserDialog({
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="edit-name">Full Name *</Label>
-            <Input
-              id="edit-name"
-              value={formData.full_name}
-              onChange={(e) =>
-                setFormData({ ...formData, full_name: e.target.value })
-              }
-            />
+            <Input id="edit-name" value={""} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="edit-email">Email *</Label>
-            <Input
-              id="edit-email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
+            <Input id="edit-email" type="email" value={"formData.email"} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="edit-phone">Phone</Label>
-            <Input
-              id="edit-phone"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-            />
+            <Input id="edit-phone" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="edit-role">Role *</Label>
-            <Select
-              value={formData.role}
-              onValueChange={(value: UserRole) =>
-                setFormData({ ...formData, role: value })
-              }
-            >
+            <Select>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -88,12 +63,12 @@ export default function EditUserDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button
-            onClick={handleEditUser}
-            disabled={!formData.full_name || !formData.email}
+            // onClick={handleEditUser}
+            // disabled={!formData.full_name || !formData.email}
             className="bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64]"
           >
             <Save className="w-4 h-4 mr-2" />
