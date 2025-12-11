@@ -44,7 +44,11 @@ export default function UserDetailsDialog({
             {/* Profile */}
             <div className="flex items-center gap-4">
               <Avatar className="w-20 h-20 border-2 border-[#A78B64]">
-                <AvatarImage src={user.name || ""} />
+                <AvatarImage
+                  src={
+                    "https://www.pngkey.com/png/full/72-729716_user-avatar-png-graphic-free-download-icon.png"
+                  }
+                />
               </Avatar>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">

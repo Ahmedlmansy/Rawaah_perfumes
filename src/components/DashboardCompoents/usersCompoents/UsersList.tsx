@@ -44,8 +44,9 @@ import { useDispatch, useSelector } from "react-redux";
 import UserDetailsDialog from "./UserDetailsDialog";
 import { UserProfile } from "@/store/features/userSlice";
 import { createClient } from "@supabase/supabase-js";
+import { toast } from "sonner";
 
-// ✅ Supabase Client
+//  Supabase Client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -61,6 +62,7 @@ export default function UsersList() {
     user: UserProfile | null;
   }>({ open: false, user: null });
   const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,31 +112,34 @@ export default function UsersList() {
     }
   };
 
-  // ✅ Change User Role
+  //  Change User Role
   const handleChangeRole = async (userId: string, newRole: UserRole) => {
-    console.log("Trying to update:", userId, newRole);
-
     try {
-      setLoading(true);
+      setUpdating(userId);
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .update({ role: newRole })
-        .eq("id", userId)
-        .select(); // ✅ مهم جدًا
-
-      console.log("Update result:", data);
+      const { error } = await supabase.rpc("update_user_role", {
+        target_user_id: userId,
+        new_role: newRole,
+      });
 
       if (error) throw error;
 
       dispatch(fetchAllUsers());
 
-      alert(`✅ User role updated to ${newRole} successfully!`);
+      toast.success(`User role updated to ${newRole} successfully!`);
     } catch (error) {
-      console.log("Supabase error:", error);
-      alert("❌ Update failed - check console");
+      console.error("Error updating role:", error);
+
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
+
+      if (errorMessage.includes("Unauthorized")) {
+        toast.error("You need admin privileges to update roles");
+      } else {
+        toast.error(`Failed to update role: ${errorMessage}`);
+      }
     } finally {
-      setLoading(false);
+      setUpdating(null);
     }
   };
 
@@ -145,22 +150,27 @@ export default function UsersList() {
     try {
       setLoading(true);
 
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("id", deleteDialog.user.id);
+      const { error } = await supabase.rpc("delete_user_account", {
+        user_id: deleteDialog.user.id,
+      });
 
-      if (profileError) throw profileError;
+      if (error) throw error;
 
       setDeleteDialog({ open: false, user: null });
       dispatch(fetchAllUsers());
 
-      alert(" User deleted successfully!");
+      toast.success("User deleted successfully!");
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      alert(` ${errorMessage}`);
       console.error("Delete user error:", error);
+
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
+
+      if (errorMessage.includes("Unauthorized")) {
+        toast.error("You need admin privileges to delete users");
+      } else {
+        toast.error(`Failed to delete user: ${errorMessage}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -206,6 +216,8 @@ export default function UsersList() {
 
             <TabsContent value={activeTab} className="space-y-4">
               {filteredUsers.map((user) => {
+                const isUpdatingThisUser = updating === user.id;
+
                 return (
                   <div
                     key={user.id}
@@ -239,6 +251,12 @@ export default function UsersList() {
                               })()}
                               <span className="capitalize">{user.role}</span>
                             </Badge>
+                            {isUpdatingThisUser && (
+                              <span className="text-sm text-blue-600 flex items-center gap-1">
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                Updating...
+                              </span>
+                            )}
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
@@ -285,9 +303,9 @@ export default function UsersList() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            disabled={loading}
+                            disabled={loading || isUpdatingThisUser}
                           >
-                            {loading ? (
+                            {loading || isUpdatingThisUser ? (
                               <Loader2 className="w-4 h-4 animate-spin" />
                             ) : (
                               <MoreVertical className="w-4 h-4" />
@@ -313,35 +331,36 @@ export default function UsersList() {
 
                           <DropdownMenuSeparator />
 
-                          {user.role !== "admin" && (
-                            <DropdownMenuItem
-                              onClick={() => handleChangeRole(user.id, "admin")}
-                              disabled={loading}
-                            >
-                              <Crown className="w-4 h-4 mr-2 text-red-600" />
-                              Promote to Admin
-                            </DropdownMenuItem>
-                          )}
-                          {user.role !== "worker" && (
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleChangeRole(user.id, "worker")
-                              }
-                              disabled={loading}
-                            >
-                              <Briefcase className="w-4 h-4 mr-2 text-blue-600" />
-                              {user.role === "admin"
-                                ? "Demote to Worker"
-                                : "Promote to Worker"}
-                            </DropdownMenuItem>
-                          )}
-                          {user.role !== "user" && (
-                            <DropdownMenuItem
-                              onClick={() => handleChangeRole(user.id, "user")}
-                              disabled={loading}
-                            >
-                              <UserCircle className="w-4 h-4 mr-2 text-gray-600" />
-                              Change to Customer
+                          {/* Admin */}
+                          {user.role !== "admin" ? (
+                            <>
+                              {user.role !== "worker" && (
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleChangeRole(user.id, "worker")
+                                  }
+                                  disabled={isUpdatingThisUser}
+                                >
+                                  <Briefcase className="w-4 h-4 mr-2 text-blue-600" />
+                                  Promote to Worker
+                                </DropdownMenuItem>
+                              )}
+                              {user.role !== "user" && (
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    handleChangeRole(user.id, "user")
+                                  }
+                                  disabled={isUpdatingThisUser}
+                                >
+                                  <UserCircle className="w-4 h-4 mr-2 text-gray-600" />
+                                  Demote to Customer
+                                </DropdownMenuItem>
+                              )}
+                            </>
+                          ) : (
+                            <DropdownMenuItem disabled>
+                              <Crown className="w-4 h-4 mr-2 text-red-400" />
+                              Admin role cannot be changed
                             </DropdownMenuItem>
                           )}
 
@@ -352,10 +371,16 @@ export default function UsersList() {
                             onClick={() =>
                               setDeleteDialog({ open: true, user })
                             }
-                            disabled={loading}
+                            disabled={
+                              loading ||
+                              isUpdatingThisUser ||
+                              user.role === "admin"
+                            }
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Delete User
+                            {user.role === "admin"
+                              ? "Cannot delete Admin"
+                              : "Delete User"}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { Toaster } from "sonner";
 
 export default async function ProtectedLayout({
   children,
@@ -17,5 +18,10 @@ export default async function ProtectedLayout({
     redirect("/login");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Toaster position="top-right" />
+    </>
+  );
 }
