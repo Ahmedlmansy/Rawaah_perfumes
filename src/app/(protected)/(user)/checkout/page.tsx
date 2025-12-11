@@ -23,6 +23,8 @@ import { AppDispatch, RootState } from "@/store";
 import { createOrderApi } from "@/store/apis/ordersApi";
 import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 import { clearCartApi } from "@/store/apis/cartApi";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function CheckoutPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -125,6 +127,7 @@ export default function CheckoutPage() {
   if (orderPlaced) {
     return (
       <div className="min-h-screen  flex items-center justify-center p-4">
+        <Header />
         <Card className="max-w-lg w-full text-center border-[#A78B64]/20">
           <CardContent className="p-12">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -155,6 +158,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen">
+      <Header />
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Header */}
         <div className="mb-8">
@@ -502,6 +506,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

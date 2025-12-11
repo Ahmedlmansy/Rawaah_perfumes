@@ -29,6 +29,8 @@ import {
   updateQtyApi,
 } from "@/store/apis/cartApi";
 import { useSupabaseUser } from "@/hooks/useSupabaseUser";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 export default function CartPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -50,7 +52,8 @@ export default function CartPage() {
   //  Empty cart
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-stone-50/50">
+      <div className="min-h-screen ">
+        <Header />
         <div className="container mx-auto px-4 py-12">
           <Card className="max-w-md mx-auto text-center border-[#A78B64]/20">
             <CardContent className="p-12">
@@ -73,6 +76,7 @@ export default function CartPage() {
             </CardContent>
           </Card>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -80,6 +84,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 lg:py-12">
+        <Header />
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -309,6 +314,7 @@ export default function CartPage() {
             </Card>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );
