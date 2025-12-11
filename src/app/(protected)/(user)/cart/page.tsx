@@ -83,8 +83,8 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen">
+      <Header />
       <div className="container mx-auto px-4 py-8 lg:py-12">
-        <Header />
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -314,8 +314,8 @@ export default function CartPage() {
             </Card>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }
