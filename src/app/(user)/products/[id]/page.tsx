@@ -25,6 +25,11 @@ import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 import { addToCartApi } from "@/store/apis/cartApi";
 import { Product } from "@/types/products";
 import { toast } from "sonner";
+import {
+  addToWishlistApi,
+  removeFromWishlistApi,
+  fetchWishlist,
+} from "@/store/apis/wishlistApi";
 
 export default function ProductPage() {
   const params = useParams<{ id: string }>();
@@ -39,17 +44,42 @@ export default function ProductPage() {
     loading: boolean;
     error: string | null;
   };
+  const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
   const { user } = useSupabaseUser();
 
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
+  // Fetch product details
   useEffect(() => {
     if (id) {
       dispatch(fetchProductDetails(id));
     }
   }, [dispatch, id]);
+
+  // Fetch wishlist when user is available
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchWishlist(user.id));
+    }
+  }, [user?.id, dispatch]);
+
+  // Sync isFavorite with wishlist items
+  useEffect(() => {
+    if (data?.id) {
+      const isInWishlist = wishlistItems.some((wishlistItem) => {
+        // Check if items is an array and contains our product
+        if (Array.isArray(wishlistItem.items)) {
+          return wishlistItem.items.some(
+            (product: Product) => product.id === data.id
+          );
+        }
+        return false;
+      });
+      setIsFavorite(isInWishlist);
+    }
+  }, [wishlistItems, data?.id]);
 
   if (loading) return <p>loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -65,7 +95,6 @@ export default function ProductPage() {
       toast.error("You must login first");
       return;
     }
-
     const result = await dispatch(
       addToCartApi({
         userId: user.id,
@@ -86,6 +115,53 @@ export default function ProductPage() {
       toast.success("Added to cart!");
     } else {
       toast.error("Failed to add to cart!");
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      toast.error("You must login first");
+      return;
+    }
+
+    // Optimistic update
+    setIsFavorite(!isFavorite);
+
+    try {
+      if (isFavorite) {
+        // Remove from wishlist
+        await dispatch(
+          removeFromWishlistApi({
+            userId: user.id,
+            productId: data.id,
+          })
+        ).unwrap();
+
+        toast.success("Removed from wishlist");
+      } else {
+        // Add to wishlist
+        await dispatch(
+          addToWishlistApi({
+            product: {
+              id: data.id,
+              name: data.name,
+              brand: data.brand,
+              price: data.price,
+              discount_price: data.discount_price,
+              image: data.image,
+              size: data.size,
+              type: data.type,
+            },
+          })
+        ).unwrap();
+
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      // Revert on error
+      setIsFavorite(!isFavorite);
+      console.error("Wishlist error:", error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -119,13 +195,13 @@ export default function ProductPage() {
                       size="icon"
                       variant="secondary"
                       className="rounded-full shadow-lg bg-white/90 hover:bg-white"
-                      onClick={() => setIsFavorite(!isFavorite)}
+                      onClick={handleWishlistToggle}
                     >
                       <Heart
-                        className={`w-5 h-5 ${
+                        className={`w-5 h-5 transition-all duration-300 ${
                           isFavorite
-                            ? "fill-red-500 text-red-500"
-                            : "text-gray-600"
+                            ? "fill-red-500 text-red-500 scale-110"
+                            : "text-gray-600 hover:text-red-400"
                         }`}
                       />
                     </Button>
@@ -142,7 +218,7 @@ export default function ProductPage() {
                   <img
                     src={data.image}
                     alt={data.name}
-                    className="w-full h-full -  p-8 transform hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full p-8 transform hover:scale-105 transition-transform duration-500"
                   />
                 </div>
               </CardContent>
@@ -191,9 +267,6 @@ export default function ProductPage() {
                 <Badge className="bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64]">
                   {data.type}
                 </Badge>
-                {/* <Badge className="bg-gradient-to-r from-[#A78B64] to-[#8B7355] hover:from-[#8B7355] hover:to-[#A78B64]">
-                  {product.type}
-                </Badge> */}
               </div>
             </div>
 

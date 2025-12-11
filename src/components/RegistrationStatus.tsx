@@ -11,6 +11,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { fetchCart } from "@/store/apis/cartApi";
+import { fetchWishlist } from "@/store/apis/wishlistApi";
 
 export default function RegistrationStatus() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,6 +22,9 @@ export default function RegistrationStatus() {
   const dispatch = useDispatch<AppDispatch>();
 
   const supabase = createSupabaseClient();
+
+  const { items: cart } = useSelector((state: RootState) => state.cart);
+  const { items: wishlist } = useSelector((state: RootState) => state.wishlist);
 
   useEffect(() => {
     setMounted(true);
@@ -59,7 +63,13 @@ export default function RegistrationStatus() {
 
     return () => subscription.unsubscribe();
   }, []);
-  const { items } = useSelector((state: RootState) => state.cart);
+
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchWishlist(user.id));
+    }
+  }, [user?.id, dispatch]);
+
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
@@ -102,7 +112,7 @@ export default function RegistrationStatus() {
               className="h-5 min-w-5 absolute rounded-full px-1 top-[-7px] left-[-17px] flex justify-center items-center text-center z-10"
               variant="default"
             >
-              {items?.length || 0}
+              {cart?.length || 0}
             </Badge>
             <i className="fa-solid fa-cart-shopping text-[24px] text-[#A38862] group-hover:text-[#8a7050] transition-colors"></i>
           </Link>
@@ -113,7 +123,7 @@ export default function RegistrationStatus() {
               className="h-5 min-w-5 absolute rounded-full px-1 top-[-7px] left-[-17px] flex justify-center items-center text-center z-10"
               variant="default"
             >
-              0
+              {wishlist.length}
             </Badge>
             <i className="fa-regular fa-heart text-[24px] text-[#A38862] group-hover:text-[#8a7050] transition-colors"></i>
           </Link>
