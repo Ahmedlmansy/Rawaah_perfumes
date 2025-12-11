@@ -89,7 +89,7 @@ const MessagesPage = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
 
-  // ✅ Fetch Messages from Supabase
+  //  Fetch Messages from Supabase
   const fetchMessages = async () => {
     try {
       setLoading(true);
