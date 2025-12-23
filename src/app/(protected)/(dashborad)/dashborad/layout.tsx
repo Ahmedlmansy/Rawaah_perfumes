@@ -33,7 +33,9 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { fetchUser } from "@/store/apis/userApi";
-import { logout } from "@/store/features/userSlice";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 
 export default function DashboardLayout({
   children,
@@ -44,6 +46,9 @@ export default function DashboardLayout({
   const { email } = useSelector((state: RootState) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("dashboard");
+    const [, setUser] = useState<User | null>(null);
+    const [, setLoggingOut] = useState(false);
+    const router = useRouter();
 
   const menuItems = [
     { id: "", label: "Dashboard", icon: LayoutDashboard },
@@ -54,6 +59,21 @@ export default function DashboardLayout({
     { id: "users", label: "Users", icon: Users },
     { id: "messages", label: "Messages", icon: Mail },
   ];
+
+    const handleLogout = async () => {
+      try {
+        setLoggingOut(true);
+        await supabase.auth.signOut();
+        setUser(null);
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        router.push("/");
+        router.refresh();
+      } catch (error) {
+        console.error("Error logging out:", error);
+      } finally {
+        setLoggingOut(false);
+      }
+    };
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
@@ -137,11 +157,12 @@ export default function DashboardLayout({
                 Settings
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600">
-                <LogOut
-                  className="w-4 h-4 mr-2"
-                  onClick={() => dispatch(logout())}
-                />
-                Logout
+                <Button
+                  onClick={handleLogout}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
