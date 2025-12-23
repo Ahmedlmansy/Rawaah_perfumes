@@ -59,7 +59,6 @@ const wishlistSlice = createSlice({
         }>
       ) => {
         state.loading = false;
-
         state.items.push({
           items: action.payload.items,
         });
@@ -75,17 +74,17 @@ const wishlistSlice = createSlice({
       state.loading = true;
     });
 
-    builder.addCase(
-      removeFromWishlistApi.fulfilled,
-      (state, action: PayloadAction<string>) => {
-        state.loading = false;
+  builder.addCase(
+  removeFromWishlistApi.fulfilled,
+  (state, action: PayloadAction<string>) => {
+    state.loading = false;
 
-        // productId
-        state.items = state.items.filter(
-          (item) => item.items.id !== action.payload
-        );
-      }
+    state.items = state.items.filter(
+      (item) => item.id !== action.payload
     );
+  }
+);
+
 
     builder.addCase(removeFromWishlistApi.rejected, (state, action) => {
       state.loading = false;

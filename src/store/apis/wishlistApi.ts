@@ -101,44 +101,43 @@ export const addToWishlistApi = createAsyncThunk(
   }
 );
 
-export const removeFromWishlistApi = createAsyncThunk(
+export const removeFromWishlistApi = createAsyncThunk<
+  string,
+  { userId: string; productId: string },
+  { rejectValue: string }
+>(
   "wishlist/remove",
-  async (
-    { userId, productId }: { userId: string; productId: string },
-    thunkAPI
-  ) => {
+  async ({ userId, productId }, thunkAPI) => {
     try {
-      // Fetch existing wishlist
-      const { data: existingWishlist, error: fetchError } = await supabase
+      const { data: wishlist, error } = await supabase
         .from("wishlist")
-        .select("*")
+        .select("items")
         .eq("user_id", userId)
-        .maybeSingle();
+        .single();
 
-      if (fetchError) throw fetchError;
-
-      if (!existingWishlist) {
+      if (error || !wishlist) {
         throw new Error("Wishlist not found");
       }
 
-      const items = existingWishlist.items || [];
-
-      // Filter out the product
-      const updatedItems = items.filter(
+      const updatedItems = (wishlist.items || []).filter(
         (item: WishlistProduct) => item.id !== productId
       );
 
-      // Update the wishlist
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from("wishlist")
         .update({ items: updatedItems })
         .eq("user_id", userId);
 
-      if (error) throw error;
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
 
       return productId;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err);
+      if (err instanceof Error) {
+        return thunkAPI.rejectWithValue(err.message);
+      }
+      return thunkAPI.rejectWithValue("Failed to remove item from wishlist");
     }
   }
 );

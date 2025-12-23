@@ -44,7 +44,6 @@ export default function ProductPage() {
     loading: boolean;
     error: string | null;
   };
-  const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
   const { user } = useSupabaseUser();
 
@@ -65,21 +64,7 @@ export default function ProductPage() {
     }
   }, [user?.id, dispatch]);
 
-  // Sync isFavorite with wishlist items
-  useEffect(() => {
-    if (data?.id) {
-      const isInWishlist = wishlistItems.some((wishlistItem) => {
-        // Check if items is an array and contains our product
-        if (Array.isArray(wishlistItem.items)) {
-          return wishlistItem.items.some(
-            (product: Product) => product.id === data.id
-          );
-        }
-        return false;
-      });
-      setIsFavorite(isInWishlist);
-    }
-  }, [wishlistItems, data?.id]);
+
 
   if (loading) return <p>loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
