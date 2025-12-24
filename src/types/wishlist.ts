@@ -10,7 +10,7 @@ export type WishlistProduct = {
 };
 
 export type WishlistItem = {
-  items: WishlistProduct[];
+items: WishlistProduct[];
   id: string
   name : string
   price: number

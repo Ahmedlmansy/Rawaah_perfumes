@@ -5,7 +5,7 @@ import {
   removeFromWishlistApi,
   clearWishlistApi,
 } from "../apis/wishlistApi";
-import { WishlistItem, WishlistProduct } from "@/types/wishlist";
+import { WishlistItem } from "@/types/wishlist";
 
 type WishlistState = {
   items: WishlistItem[];
@@ -47,23 +47,22 @@ const wishlistSlice = createSlice({
       state.loading = true;
     });
 
-    builder.addCase(
-      addToWishlistApi.fulfilled,
-      (
-        state,
-        action: PayloadAction<{
-          id: string;
-          user_id: string;
-          created_at: string;
-          items: WishlistProduct;
-        }>
-      ) => {
-        state.loading = false;
-        state.items.push({
-          items: action.payload.items,
-        });
-      }
-    );
+  builder.addCase(
+  addToWishlistApi.fulfilled,
+  (
+    state,
+    action: PayloadAction<{
+      id: string;
+      user_id: string;
+      created_at: string;
+      items: WishlistItem;
+    }>
+  ) => {
+    state.loading = false;
+    state.items.push(action.payload.items); 
+  }
+);
+
 
     builder.addCase(addToWishlistApi.rejected, (state, action) => {
       state.loading = false;
